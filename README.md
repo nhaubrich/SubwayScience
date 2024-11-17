@@ -12,9 +12,6 @@ With over 400 stations and up to millions of daily riders, the New York City sub
 
 Predictions of this kind are valuable for a variety of purposes. For instance, users with access to such predictions could adjust their travel schedule so that they do not use a particular station when that station is experiencing excess ridership. This could improve the overall efficiency and usability of the subway system. Moreover, these predictive models could inform the MTA of which stations may be over- or under-utilized. This is valuable information which can inform decisions regarding resource allocation in both the short-term and long-term.
 
-:warning: Add more motivation/use cases? explicitly mention time-series 
-
-
 ## Dataset
 Our dataset consists of hourly ridership at each of the 428 MTA stations from February 2022 to October 2024, and was obtained from [data.ny.gov](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-Beginning-July-2020/wujg-7c2s/about_data). By summing the hourly ridership from each station, we also have access to the hourly total ridership. The hourly total ridership for one month is shown below. 
 
@@ -27,8 +24,8 @@ By plotting the hourly total ridership, we clearly see some periodic behavior, c
 ## Data Preprocessing
 We begin by converting our dataset into an array with each row corresponding to an hour, with ridership for each station. Further details on this process can be found in `scripts/README.md`. Altogether, we have 23349 hours of observations, with ridership for each of the 428 stations. We then split the data into a The data was split into training, validation, and testing set, consisting of 70%, 10%, and 20% of our time interval, respectively. This means that we will train our machine learning models on the first 70% of our time interval, and test their performance by predicting the final 20% of our time interval, and comparing the predictions to the true values.
 
-Next, we perform some feature engineering so we may provide our models with as much valuable data as we can. This process includes
-- scaling the ridership to zero mean and unit variance.
+Next, we perform some feature engineering so we may provide our models with as much valuable data as we can. This process includes:
+- Normalizing the ridership data by scaling the ridership to mean 0 and variance 1.
 - Encoding time of day, day of week, day of month, and month of year as "Fourier variables". This is a way of encoding, for example, each day of the week as a pair of numbers, so that nearby days (e.g. Sunday and Monday) have nearby encodings.
 - Including a flag (1 or 0) for US holidays, which was accomplished using python's holiday library. This is valuable since subway ridership on major Holidays (e.g. Christmas, Thanksgiving) behaves much differently than it does on a typical day. 
 
