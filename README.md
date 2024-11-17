@@ -8,32 +8,40 @@ By Nick Haubrich and Jack Carlisle
 
 ## Overview
 
-With over 400 stations and up to millions of daily riders, the New York Subway is one of the largest and busiest services of its kind. Predictions of its usage in advance contain significant utility for allocating resources to different parts, whether to address short-term wear-and-tear or decade-scale improvements. The Metropolitan Transit Authority (MTA) has periodically released data on the subway's ridership as part of its Open Data Program. In this project, we apply machine learning to model and forecast the hourly ridership of the NYC subway on short and medium timescales.
+With over 400 stations and up to millions of daily riders, the New York City subway system is one of the largest and busiest services of its kind. For many residents, the subway system is their primary means of transportation. The Metropolitan Transit Authority (MTA) has periodically released data on the subway's ridership as part of its Open Data Program. In this project, we implement machine learning techniques to model and forecast the hourly ridership of the NYC subway on short and medium timescales.
+
+Predictions of this kind are valuable for a variety of purposes. For instance, users with access to such predictions could adjust their travel schedule so that they do not use a particular station when that station is experiencing excess ridership. This could improve the overall efficiency and usability of the subway system. Moreover, these predictive models could inform the MTA of which stations may be over- or under-utilized. This is valuable information which can inform decisions regarding resource allocation in both the short-term and long-term.
 
 :warning: Add more motivation/use cases? explicitly mention time-series 
 
 
 ## Dataset
-The dataset consists of hourly ridership at each subway station from February 2022 to October 2024, and was obtained from [data.ny.gov](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-Beginning-July-2020/wujg-7c2s/about_data). The data was preprocessed into an array with each row corresponding to an hour, with ridership for each station. Further details on this process can be found in `scripts/README.md`.
-
-The dataset consists of 23349 hours of observations, with ridership for each of the 428 stations. The data was split into training/validation/testing intervals of 70%/10%/20%. The total ridership per hour is shown below for one month. 
+Our dataset consists of hourly ridership at each of the 428 MTA stations from February 2022 to October 2024, and was obtained from [data.ny.gov](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-Beginning-July-2020/wujg-7c2s/about_data). By summing the hourly ridership from each station, we also have access to the hourly total ridership. The hourly total ridership for one month is shown below. 
 
 ![month of data](plots/monthOfData.png)
 
 :warning: Change x-axis from hours to date-time
 
-For forecasting, the ridership was scaled to zero mean and unit variance. Due to the cyclic time dependence, we encoded the day of week, day of the month, and month of the year as Fourier variables. Additionally, a flag for US holidays was added using python's holiday library.
+By plotting the hourly total ridership, we clearly see some periodic behavior, corresponding to the time of day, day of the week, etc. Our machine learning models will be able to learn these periodic behaviors, and use them to make accurate forecasting predictions.
+
+## Data Preprocessing
+We begin by converting our dataset into an array with each row corresponding to an hour, with ridership for each station. Further details on this process can be found in `scripts/README.md`. Altogether, we have 23349 hours of observations, with ridership for each of the 428 stations. We then split the data into a The data was split into training, validation, and testing set, consisting of 70%, 10%, and 20% of our time interval, respectively. This means that we will train our machine learning models on the first 70% of our time interval, and test their performance by predicting the final 20% of our time interval, and comparing the predictions to the true values.
+
+Next, we perform some feature engineering so we may provide our models with as much valuable data as we can. This process includes
+- scaling the ridership to zero mean and unit variance.
+- Encoding time of day, day of week, day of month, and month of year as "Fourier variables". This is a way of encoding, for example, each day of the week as a pair of numbers, so that nearby days (e.g. Sunday and Monday) have nearby encodings.
+- Including a flag (1 or 0) for US holidays, which was accomplished using python's holiday library. This is valuable since subway ridership on major Holidays (e.g. Christmas, Thanksgiving) behaves much differently than it does on a typical day. 
 
 ## Machine Learning Forecasting
-Two scenarios were considered. First, the total hourly ridership was modeled, i.e. a univariate forecast. Second, this was expanded to the multivariate case of predicting ridership for each station. Both are handled with a typical autoregressive approach where the model predicts future observations based on the past several observations plus external features.
+Our next task is to build and train our machine learning models. We undertake two main tasks: predicting total subway ridership, and then, predicting per-station subway ridership. Both are handled with an autoregressive approach: each model predicts future observations based on the past several observations plus external features (such as time of day, month of year, etc.).
 
-The performance of models was evaluated on the root mean square error of the test datasets. Initial predictions from the model were fed back in to forecast the ridership multiple hours in advance. 
+We evaluate the performance of models on our testing set using the root mean square error. Our model is build to predict one hour of ridership in advance. We can also predict multiple hours into the future by feeding our models predictions back into the model as inputs.
 
-### Total Ridership Forecasting
+### Forecasting Total Subway Ridership
 For forecasting the total ridership, three model architectures were considered:
- - Linear Model
- - Dense Neural Network
- - Long Short-Term Memory Network
+ - Linear Model (Linear)
+ - Dense Neural Network (NN)
+ - Long Short-Term Memory Network (LSTM)
 Hyperparameters for the deep networks were varied to obtain the local maximum in performance.
 Metrics:
  - Define RMSE for X hours ahead
@@ -42,8 +50,8 @@ Metrics:
 
 ![total ridership RMSE comparison](plots/totalRidershipRMSEComparison.png)
 
-### Per-Station Forecasting
-A per-station model requires 428 forecasts instead of a single one, resulting in a substantialincrease in computational burden. Simply feeding all station information into deep networks proved ineffective, as the increase in input variables led to overfitting and unstable extrapolations. Instead, a dense neural network that acted on each station individually was trained, implemented as a 1D CNN. Station identifiers are encoded by unique 16-dimensional vectors. (**add embedding to notebook**)
+### Forecasting Per-Station Subway Ridership
+A per-station model outputs a prediction of ridership for each of the 428 MTA stations. Since such a model produces 428 outputs instead of a single output, this results in a substantial increase in computational burden. Simply feeding all station information into deep networks proved ineffective, as the increase in input variables led to overfitting and unstable extrapolations. Instead, a dense neural network that acted on each station individually was trained, and implemented as a 1-dimensional convolutional neural network (CNN). Station identifiers are encoded by unique 16-dimensional vectors. (**add embedding to notebook**)
 
 **add linear model comparison and many-to-many LSTM or NN**
 
@@ -54,6 +62,9 @@ A per-station model requires 428 forecasts instead of a single one, resulting in
 **Put awesome gifs here**
 
 # Conclusions and future directions
- - Pretty effective!
+
+In conclusion, we have implemented a LSTM neural network which accurately predicts total MTA ridership given information about past ridership. Moreover, we implemented a 1-dimensional CNN which accurately predicts per-station MTA ridership given information about past ridership. These models provide information which may be useful for MTA riders regarding use of the subway system, and for MTA decision regarding resource allocation, and future project development. 
+
+Finally, we note that the performance of our models was worst in certain areas, including near Yankee stadium, and near local beaches. This suggests that further feature engineering may improve our model. For instance, when predicting ridership for stations near Yankee stadium, we may include the data of whether or not there is a home game being played near that time. Or, for instance, when predicting ridership near local beaches, we may include weather data (is it raining? cold? windy?) to improve the accuracy of our predictions.
+
  - May be way to do to LSTM what 1d CNN did to NN
- - Worst stations are near baseball stadiums or beaches...what to add?
