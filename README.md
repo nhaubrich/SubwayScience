@@ -15,9 +15,7 @@ Predictions of this kind are valuable for a variety of purposes. For instance, u
 ## Dataset
 Our dataset consists of hourly ridership at each of the 428 MTA stations from February 2022 to October 2024, and was obtained from [data.ny.gov](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-Beginning-July-2020/wujg-7c2s/about_data). By summing the hourly ridership from each station, we also have access to the hourly total ridership. The hourly total ridership for two weeks is shown below. 
 
-![Two weeks of data](plots/total_ridership_plot.png)
-
-:warning: Change x-axis from hours to date-time
+![Two weeks of data](plots/2weeksofridership.png)
 
 By plotting the hourly total ridership, we clearly see some periodic behavior, corresponding to the time of day, day of the week, etc. Our machine learning models will be able to learn these periodic behaviors, and use them to make accurate forecasting predictions.
 
