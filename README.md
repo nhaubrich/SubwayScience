@@ -13,9 +13,9 @@ With over 400 stations and up to millions of daily riders, the New York City sub
 Predictions of this kind are valuable for a variety of purposes. For instance, users with access to such predictions could adjust their travel schedule so that they do not use a particular station when that station is experiencing excess ridership. This could improve the overall efficiency and usability of the subway system. Moreover, these predictive models could inform the MTA of which stations may be over- or under-utilized. This is valuable information which can inform decisions regarding resource allocation in both the short-term and long-term.
 
 ## Dataset
-Our dataset consists of hourly ridership at each of the 428 MTA stations from February 2022 to October 2024, and was obtained from [data.ny.gov](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-Beginning-July-2020/wujg-7c2s/about_data). By summing the hourly ridership from each station, we also have access to the hourly total ridership. The hourly total ridership for one month is shown below. 
+Our dataset consists of hourly ridership at each of the 428 MTA stations from February 2022 to October 2024, and was obtained from [data.ny.gov](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-Beginning-July-2020/wujg-7c2s/about_data). By summing the hourly ridership from each station, we also have access to the hourly total ridership. The hourly total ridership for two weeks is shown below. 
 
-![month of data](plots/monthOfData.png)
+![Two weeks of data](plots/total_ridership_plot.png)
 
 :warning: Change x-axis from hours to date-time
 
