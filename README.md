@@ -51,9 +51,18 @@ A per-station model requires 428 forecasts instead of a single one, resulting in
 
 (plot of some stations for examples)
 
-**Put awesome gifs here**
+![map-comparison](plots/mergedMTAanimation.gif)
 
 # Conclusions and future directions
  - Pretty effective!
  - May be way to do to LSTM what 1d CNN did to NN
  - Worst stations are near baseball stadiums or beaches...what to add?
+
+# Environment Setup
+We recommend a python virtual environment:
+```
+python3.11 -m venv venv/
+. venv/bin/activate
+pip install -r requirements.txt
+```
+For convenience, the notebooks download the preprocessed data from a saved source.
