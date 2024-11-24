@@ -54,7 +54,7 @@ A per-station model outputs a prediction of ridership for each of the 428 MTA st
 
 (plot of some stations for examples)
 
-**Put awesome gifs here**
+![map-comparison](plots/mergedMTAanimation.gif)
 
 # Conclusions and future directions
 
@@ -63,3 +63,13 @@ In conclusion, we have implemented a LSTM neural network which accurately predic
 Finally, we note that the performance of our models was worst in certain areas, including near Yankee stadium, and near local beaches. This suggests that further feature engineering may improve our model. For instance, when predicting ridership for stations near Yankee stadium, we may include the data of whether or not there is a home game being played near that time. Or, for instance, when predicting ridership near local beaches, we may include weather data (is it raining? cold? windy?) to improve the accuracy of our predictions.
 
  - May be way to do to LSTM what 1d CNN did to NN
+
+# Environment Setup
+We recommend a python virtual environment:
+```
+python3.11 -m venv venv/
+. venv/bin/activate
+pip install -r requirements.txt
+```
+For convenience, the notebooks download the preprocessed data from a saved source.
+=======
