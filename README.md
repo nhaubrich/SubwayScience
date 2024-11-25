@@ -36,7 +36,7 @@ Next, we perform some feature engineering so we may provide our models with as m
 ## Machine Learning Forecasting
 Our next task is to build and train our machine learning models. We undertake two main tasks: predicting total subway ridership, and then, predicting per-station subway ridership. Both are handled with an autoregressive approach: each model predicts future observations based on the past several observations plus external features (such as time of day, month of year, etc.).
 
-We evaluate the performance of models on our testing set using the root mean square error. Our model is build to predict one hour of ridership in advance. We can also predict multiple hours into the future by feeding our models predictions back into the model as inputs.
+We evaluate the performance of models on our testing set using the root mean square error (RMSE). Our model is build to predict one hour of ridership in advance. We can also predict multiple hours into the future by feeding our models predictions back into the model as inputs.
 
 ### Forecasting Total Subway Ridership
 For forecasting the total ridership, three model architectures were considered:
@@ -54,18 +54,19 @@ The models were evaluated on the RMSE of predictions up to 24 hours in advance o
 ![total ridership RMSE comparison](plots/totalRidershipRMSEComparison.png)
 
 ### Forecasting Per-Station Subway Ridership
-A per-station model outputs a prediction of ridership for each of the 428 MTA stations. Since such a model produces 428 outputs instead of a single output, this results in a substantial increase in computational burden. Simply feeding all station information into deep networks proved ineffective, as the increase in input variables led to overfitting and unstable extrapolations. The first attempts along these lines with LSTM, dense networks, and a linear model performed poorly. Instead, a dense neural network that acted on each station individually was trained, and implemented as a 1-dimensional convolutional neural network (CNN). Station identifiers are encoded by unique 16-dimensional vectors supplied as additional features. 
+
+Next, we turn our attention to building and training a per-station ridership model. Such a model will output a prediction of ridership for each of the 428 MTA stations. This results in a substantial increase in computational burden. Simply feeding all station information into deep networks proved ineffective, as the increase in input variables led to overfitting and unstable extrapolations. The first attempts along these lines with LSTM, dense networks, and a linear model performed poorly. Instead, a dense neural network that acted on each station individually was trained, and implemented as a 1-dimensional convolutional neural network (CNN). Station identifiers are encoded by unique 16-dimensional vectors supplied as additional features. 
 
 Metrics of the CNN evaluated on the test dataset are show below. The CNN's total RMSE across stations for the first predicted hour is 5.4, increasing to 22.5 for the twelfth hour (upper left). The summed RMSE for each station over the 12 hour predictions is below 2 in most cases, with several outliers above 4 (upper right). The predictions of these stations deviates most at the final hour, as show in the plot of RMSE at each hour and station (lower).
 
 ![multistation RMSE](plots/multistationRMSE.png)
 
-As a visualization, the CNN's predictions and the true values over a sample 4-day period are projected according to the station's coordinates onto a map of NYC.
+In order to visualize the performance of our model, we plot the predicted ridersip and true ridership over a sample 4-day period on adjacent geographical plots. The ridership of each station is depicted by a colored dot at the station's location, whose color and size reflect the station's ridership.
 ![map-comparison](plots/mergedMTAanimation.gif)
 
 # Conclusions and future directions
 
-In conclusion, we have implemented a LSTM neural network which accurately predicts total MTA ridership given information about past ridership. Moreover, we implemented a 1-dimensional CNN which accurately predicts per-station MTA ridership given information about past ridership. These models provide information which may be useful for MTA riders regarding use of the subway system, and for MTA decision regarding resource allocation, and future project development. 
+In conclusion, we have implemented a LSTM neural network which accurately predicts total MTA ridership given information about past ridership. Moreover, we implemented a 1-dimensional CNN which accurately predicts per-station MTA ridership given information about past ridership. These models provide information which may be useful for MTA riders regarding use of the subway system, and for MTA decisions regarding resource allocation, and future project development. 
 
 The performance of our models was worst for the stations servicing Citi Field, Yankee Stadium, and Rockaway beach. These three locations are subject to irregular surges in ridership (due to MLB games or nice weather). Further feature engineering may improve the model. Incorporating the home schedule of games and weather predictions (e.g. temperature and precipitation) may substantially improve the model's accuracy for these stations.
 
