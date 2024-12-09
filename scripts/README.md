@@ -8,7 +8,7 @@ $$
 \mathrm{Y_P} = \cos(2\pi\frac{\mathrm{t}}{P}).
 $$
 
-The periods encoded were day of week ($P=7$), day of the month ($P=31$), and month of the year ($P=12$).
+The periods encoded were hour of the day($P=24$), day of week ($P=7$), and month of the year ($P=12$).
 
 A binary flag denoting federal holidays was computed from the [holidays](https://pypi.org/project/holidays/) package.
 
