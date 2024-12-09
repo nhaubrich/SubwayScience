@@ -30,7 +30,7 @@ We begin by converting our dataset into an array with each row corresponding to 
 Next, we perform some feature engineering so we may provide our models with as much valuable data as we can. This process includes:
 
 - Normalizing the ridership data by scaling the ridership to mean 0 and variance 1.
-- Encoding time of day, day of week, day of month, and month of year as "Fourier variables". This is a way of encoding, for example, each day of the week as a pair of numbers, so that nearby days (e.g. Sunday and Monday) have nearby encodings.
+- Encoding time of day, day of week, and month of year as "Fourier variables". This is a way of encoding, for example, each day of the week as a pair of numbers, so that nearby days (e.g. Sunday and Monday) have nearby encodings.
 - Including a flag (1 or 0) for US holidays, which was accomplished using python's holiday library. This is valuable since subway ridership on major Holidays (e.g. Christmas, Thanksgiving) behaves much differently than it does on a typical day. 
 
 ## Machine Learning Forecasting
